@@ -1,0 +1,544 @@
+/* Import des polices (déjà dans index.html, mais ça ne fait pas de mal de l'avoir ici aussi pour la cohérence) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --primary-green: #00ff9c; /* Couleur d'accent principale */
+  --bg-dark: #070707; /* Fond presque noir */
+  --card-bg: rgba(15, 15, 15, 0.8); /* Fond des cartes et éléments "glassy" */
+  --border-subtle: rgba(255, 255, 255, 0.08); /* Bordure très discrète */
+  --text-light-gray: #a1a1aa; /* Texte gris clair */
+}
+
+/* Réinitialisation CSS */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: white;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden; /* Empêche le scroll horizontal indésirable */
+  min-height: 100vh;
+  position: relative; /* Pour positionner la grille de fond */
+
+  /* Grille de fond de Mastra */
+  background-image: 
+    linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Conteneur principal pour le positionnement relatif */
+.main-layout {
+  position: relative;
+  z-index: 1; /* Assure que le contenu est au-dessus du background SVG */
+}
+
+/* Background Node Graph SVG */
+.background-node-graph {
+  position: fixed; /* Reste en place au scroll */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0; /* Placé derrière le contenu */
+  pointer-events: none; /* Ne bloque pas les interactions */
+  overflow: hidden; /* Assure que le SVG ne déborde pas */
+}
+
+.network-svg {
+  width: 100%;
+  height: 100%;
+  transform: scale(1.2); /* Pour que le graph soit plus grand */
+  opacity: 0.2; /* Très subtil, comme Mastra */
+  filter: blur(1px); /* Pour adoucir un peu */
+}
+
+/* Styles pour les éléments du Node Graph */
+.node-graph-path {
+  fill: none;
+  stroke: rgba(0, 255, 156, 0.2); /* Vert subtil pour les lignes */
+  stroke-width: 1;
+  stroke-dasharray: 6 6; /* Lignes pointillées */
+  animation: dashAnimation 30s linear infinite;
+}
+
+.node-graph-circle {
+  fill: rgba(0, 255, 156, 0.4); /* Petits cercles aux extrémités */
+  opacity: 0.8;
+}
+
+.node-graph-central-blob {
+  fill: url(#blobGradient); /* Utilise le dégradé défini dans SVG */
+  filter: url(#grainyNoise); /* Applique le filtre de bruit */
+  animation: pulseBlob 8s ease-in-out infinite alternate;
+  transform-origin: 50% 50%; /* Centre l'animation de pulsation */
+}
+
+/* Animations SVG */
+@keyframes dashAnimation {
+  to {
+    stroke-dashoffset: -1000; /* Anime les pointillés */
+  }
+}
+
+@keyframes pulseBlob {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 24px 60px;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 10; /* Au-dessus du contenu pour la navigation */
+  background: rgba(0, 0, 0, 0.6); /* Fond semi-transparent */
+  backdrop-filter: blur(8px); /* Effet de flou derrière la navbar */
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.logo {
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  font-size: 22px;
+}
+
+.nav-links a, .nav-auth button {
+  color: var(--text-light-gray);
+  text-decoration: none;
+  margin-left: 25px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: white;
+}
+
+.nav-auth .btn-connexion {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 15px;
+  border-radius: 6px;
+}
+
+.nav-auth .btn-inscription {
+  background: var(--primary-green);
+  color: var(--bg-dark);
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.nav-auth .btn-inscription:hover {
+  background: #00e08c; /* Vert légèrement plus clair */
+}
+
+/* Hero Section */
+.hero {
+  padding: 120px 20px 80px;
+  max-width: 1200px; /* Plus large pour correspondre à Mastra */
+  margin: 0 auto;
+  text-align: left; /* Aligné à gauche comme Mastra */
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hero-content {
+  flex: 1;
+  max-width: 650px; /* Limite la largeur du texte */
+}
+
+.hero h1 {
+  font-size: clamp(40px, 5vw, 70px); /* Taille adaptative */
+  line-height: 0.95; /* Interligne très serré */
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  margin-bottom: 20px;
+  background: linear-gradient(to bottom, #fff 60%, #888); /* Dégradé de texte */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.event{
+    color:#39ff88;
+    margin-bottom: 20px;
+}
+
+.loading{
+    text-decoration: line-through;
+    opacity:0.6;
+}
+
+.gradient-text{
+  background: linear-gradient(
+    90deg,
+    #00ff99,
+    #00ffff,
+    #39ff88,
+    #00ff99
+  );
+}
+
+.hero p.tagline {
+  font-size: 19px;
+  color: var(--text-light-gray);
+  line-height: 1.6;
+  margin-bottom: 35px;
+  max-width: 550px;
+}
+
+.hero-cta {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.command-box {
+  display: inline-flex; /* Utilise inline-flex pour l'icône */
+  align-items: center;
+  background: var(--card-bg);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  border: 1px solid var(--border-subtle);
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.command-box:hover {
+  border-color: var(--primary-green);
+}
+
+.command-box .icon {
+  margin-left: 10px;
+  color: var(--text-light-gray);
+}
+
+.quickstart-link {
+  color: var(--text-light-gray);
+  font-size: 14px;
+  text-decoration: none;
+  position: relative;
+}
+.quickstart-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background-color: var(--text-light-gray);
+  transform: scaleX(0);
+  transition: transform 0.2s ease-out;
+}
+.quickstart-link:hover::after {
+  transform: scaleX(1);
+}
+
+/* Composant CodeDemo */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  margin-top: 60px;
+  padding-bottom: 100px;
+}
+
+.cards {
+  display: flex;
+  gap: 15px;
+}
+
+.card {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  background: var(--card-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  border: 1px solid var(--border-subtle);
+  transition: 0.2s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.card.active {
+  border-color: var(--primary-green);
+  background: rgba(0, 255, 156, 0.15); /* Vert avec opacité pour le fond actif */
+  box-shadow: 0 4px 20px rgba(0, 255, 156, 0.2);
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255,255,255,0.2);
+}
+
+.card.active:hover {
+  transform: translateY(-3px);
+  border-color: var(--primary-green);
+}
+
+.code-box {
+  width: 90%;
+  max-width: 750px;
+  background: rgba(10, 10, 10, 0.85); /* Fond plus opaque pour la lisibilité */
+  padding: 30px;
+  border-radius: 16px;
+  border: 1px solid var(--border-subtle);
+  text-align: left;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+  backdrop-filter: blur(8px); /* Effet de flou derrière le code */
+}
+
+pre {
+  color: #e2e8f0; /* Couleur du texte du code */
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  line-height: 1.7;
+  white-space: pre-wrap; /* Gère les retours à la ligne longs */
+}
+
+/* Réactivité de base */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 20px 30px;
+  }
+  .nav-links, .nav-auth {
+    display: none; /* Cache les liens de nav sur mobile pour simplifier */
+  }
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    padding-top: 80px;
+  }
+  .hero-content {
+    max-width: 100%;
+  }
+  .hero h1 {
+    font-size: clamp(35px, 10vw, 60px);
+  }
+  .hero p.tagline {
+    font-size: 17px;
+    max-width: 90%;
+  }
+  .hero-image {
+    width: 100%;
+    margin-top: 40px;
+    height: 300px; /* Ajuste la hauteur du graph sur mobile */
+  }
+  .cards {
+    flex-wrap: wrap; /* Les cartes peuvent passer à la ligne */
+    justify-content: center;
+  }
+  .code-box {
+    padding: 20px;
+    font-size: 13px;
+  }
+}
+
+.background-lines{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:-1;
+    overflow:hidden;
+}
+
+.lines{
+    width:100%;
+    height:100%;
+}
+
+.lines path{
+    fill:none;
+    stroke:#39ff88;
+    stroke-width:2;
+    stroke-dasharray:10;
+    animation:move 10s linear infinite;
+}
+
+.lines circle{
+    fill:none;
+    stroke:#39ff88;
+    stroke-width:2;
+    stroke-dasharray:6;
+    animation:move 8s linear infinite;
+}
+
+.background-animation{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:-1;
+    overflow:hidden;
+}
+
+.globe{
+    width:100%;
+    height:100%;
+}
+
+.globe-outline{
+    fill:none;
+    stroke:#39ff88;
+    stroke-width:1.5;
+}
+
+.globe-line{
+    fill:none;
+    stroke:#39ff88;
+    stroke-width:1;
+    stroke-dasharray:6;
+}
+
+@keyframes move{
+
+    0%{
+       stroke-dashoffset:0;
+    }
+
+    100%{
+       stroke-dashoffset:1000;
+    }
+
+}
+
+.globe{
+    animation:rotateGlobe 30s linear infinite;
+}
+
+@keyframes rotateGlobe{
+
+    from{
+        transform:rotate(0deg);
+    }
+
+    to{
+        transform:rotate(360deg);
+    }
+
+}
+
+.star{
+    fill:white;
+    animation:twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle{
+
+    from{
+        opacity:0.2;
+    }
+
+    to{
+        opacity:1;
+    }
+
+}
+
+.gradient-text{
+  background: linear-gradient(
+    90deg,
+    #00ff99,
+    #00ffff,
+    #39ff88,
+    #00ff99
+  );
+
+  background-size: 300%;
+  
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: gradientMove 4s linear infinite;
+}
+
+@keyframes gradientMove{
+
+  0%{
+    background-position:0%;
+  }
+
+  100%{
+    background-position:300%;
+  }
+
+}
+
+.agent-card{
+  width:90%;
+  max-width:800px;
+  margin:auto;
+  background:#0b0b0b;
+  border-radius:40px;
+  padding:60px;
+  border:1px solid #222;
+  color:white;
+}
+
+.network{
+   width:100%;
+   height:300px;
+}
+
+.network circle{
+   fill:none;
+   stroke:#52ff83;
+   stroke-width:2;
+}
+
+.network line{
+   stroke:#555;
+   stroke-dasharray:4;
+}
+
+.blob{
+   position:absolute;
+   right:20%;
+   top:40%;
+   width:200px;
+   height:200px;
+   background:radial-gradient(circle,#777,#000);
+   border-radius:40% 60% 50% 70%;
+   filter:contrast(130%);
+}
+
+.blob{
+   animation:blobMove 6s infinite alternate ease-in-out;
+}
+
+@keyframes blobMove{
+
+   0%{
+     border-radius:40% 60% 50% 70%;
+    }
+    
+    100%{
+     border-radius:60% 40% 70% 50%;
+    }
+
+}
